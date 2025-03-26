@@ -96,6 +96,7 @@ export class Rendertron {
     //   options = ctx.request.body;
     // }
 
+    console.log(`handleReportRequest address:`, url);
     const report = await this.renderer.report(url);
 
     // Mark the response as coming from Rendertron.

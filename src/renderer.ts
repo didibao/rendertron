@@ -195,6 +195,7 @@ export class Renderer {
     address: string): Promise<string | null> {
     const page = await this.browser.newPage();
 
+    console.log(`start 1`);
     // Step 1: Navigate to login page
     await page.goto('https://rpp.corelogic.com.au', { waitUntil: 'networkidle2' });
 
