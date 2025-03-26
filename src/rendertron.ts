@@ -96,7 +96,12 @@ export class Rendertron {
     //   options = ctx.request.body;
     // }
 
-    await this.renderer.report(url);
+    const report = await this.renderer.report(url);
+
+    // Mark the response as coming from Rendertron.
+    ctx.set('x-renderer', 'rendertron');
+    ctx.status = 200;
+    ctx.body = { report };
   }
 
   async handleRenderRequest(ctx: Koa.Context, url: string) {
