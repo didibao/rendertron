@@ -59,7 +59,7 @@ export class Rendertron {
 
     // Endpoint to generate report URL for a property address
     this.app.use(route.get(
-      '/report/:url(.*)', this.handleReportRequest.bind(this)));
+      '/getreport/:url(.*)', this.handleReportRequest.bind(this)));
 
     return this.app.listen(this.port, () => {
       console.log(`Listening on port ${this.port}`);
@@ -100,8 +100,8 @@ export class Rendertron {
 
     // Mark the response as coming from Rendertron.
     ctx.set('x-renderer', 'rendertron');
-    ctx.status = 200;
     ctx.body = { report };
+    ctx.set('Content-Type', 'application/json');
   }
 
   async handleRenderRequest(ctx: Koa.Context, url: string) {
