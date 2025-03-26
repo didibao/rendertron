@@ -91,7 +91,7 @@ export class Rendertron {
       options = ctx.request.body;
     }
 
-    return await this.renderer.report(options.address);
+    await this.renderer.report(options.address);
   }
 
   async handleRenderRequest(ctx: Koa.Context, url: string) {

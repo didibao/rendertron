@@ -192,7 +192,7 @@ export class Renderer {
   }
 
   async report(
-    address: string): Promise<SerializedResponse> {
+    address: string): Promise<string> {
     const page = await this.browser.newPage();
 
     // Step 1: Navigate to login page
@@ -202,8 +202,8 @@ export class Renderer {
 
     // Step 2: Fill in login form and submit
     // (Replace selectors with the actual selectors for the login form)
-    await page.type('#username', process.env.WEB_USERNAME);
-    await page.type('#password', process.env.WEB_PASSWORD);
+    await page.type('#username', process.env.WEB_USERNAME | '');
+    await page.type('#password', process.env.WEB_PASSWORD | '');
     await Promise.all([
       page.click('#signOnButton'),
       page.waitForNavigation({ waitUntil: 'networkidle2' }),
@@ -236,16 +236,16 @@ export class Renderer {
     await page.waitForSelector('input.MuiSwitch-input');
 
     // Check if the switch is checked
-    const isChecked = await page.$eval('input.MuiSwitch-input', el => el.checked);
+    // const isChecked = await page.$eval('input.MuiSwitch-input', el => el.checked);
 
-    if (isChecked) {
-      // Click the switch to turn it off
-      await page.click('input.MuiSwitch-input');
-    }
+    // if (isChecked) {
+    // Click the switch to turn it off
+    await page.click('input.MuiSwitch-input');
+    // }
 
     // Optionally verify the switch is now unchecked
-    const updatedChecked = await page.$eval('input.MuiSwitch-input', el => el.checked);
-    console.log('phone number is now checked:', updatedChecked); // should log false
+    // const updatedChecked = await page.$eval('input.MuiSwitch-input', el => el.checked);
+    // console.log('phone number is now checked:', updatedChecked); // should log false
 
     // Wait for the Generate Report button to appear
     await page.waitForSelector('button[name="generate-report-pdf"]');
@@ -262,7 +262,7 @@ export class Renderer {
 
     await page.close();
 
-    return { status: 200, content: reportUrl };
+    return reportUrl;
   }
 }
 
