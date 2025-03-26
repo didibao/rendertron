@@ -204,8 +204,12 @@ export class Renderer {
     // 1. Wait for the button to appear
     await page.waitForSelector('button.btn-login');
 
+    console.log(`start 2`);
+
     // 2. Click the button
     await page.click('button.btn-login');
+
+    console.log(`start 3`);
 
     // 3. (Optional) Wait for the collapse or login form to appear if needed
     // For example, if a "collapse" or modal with id="#login" is supposed to open:
