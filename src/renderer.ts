@@ -192,7 +192,7 @@ export class Renderer {
   }
 
   async report(
-    address: string): Promise<string> {
+    address: string): Promise<string | null> {
     const page = await this.browser.newPage();
 
     // Step 1: Navigate to login page
@@ -202,8 +202,8 @@ export class Renderer {
 
     // Step 2: Fill in login form and submit
     // (Replace selectors with the actual selectors for the login form)
-    await page.type('#username', process.env.WEB_USERNAME | '');
-    await page.type('#password', process.env.WEB_PASSWORD | '');
+    await page.type('#username', process.env.WEB_USERNAME || '');
+    await page.type('#password', process.env.WEB_PASSWORD || '');
     await Promise.all([
       page.click('#signOnButton'),
       page.waitForNavigation({ waitUntil: 'networkidle2' }),

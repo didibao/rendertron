@@ -59,7 +59,7 @@ export class Rendertron {
 
     // Endpoint to generate report URL for a property address
     this.app.use(route.post(
-      '/report', this.handleReportRequest.bind(this)));
+      '/report/:url(.*)', this.handleReportRequest.bind(this)));
 
     return this.app.listen(this.port, () => {
       console.log(`Listening on port ${this.port}`);
@@ -81,17 +81,22 @@ export class Rendertron {
     return false;
   }
 
-  async handleReportRequest(ctx: Koa.Context) {
+  async handleReportRequest(ctx: Koa.Context, url: string) {
     if (!this.renderer) {
       throw (new Error('No renderer initalized yet.'));
     }
 
-    let options = undefined;
-    if (ctx.method === 'POST' && ctx.request.body) {
-      options = ctx.request.body;
+    if (this.restricted(url)) {
+      ctx.status = 403;
+      return;
     }
 
-    await this.renderer.report(options.address);
+    // let options = undefined;
+    // if (ctx.method === 'POST' && ctx.request.body) {
+    //   options = ctx.request.body;
+    // }
+
+    await this.renderer.report(url);
   }
 
   async handleRenderRequest(ctx: Koa.Context, url: string) {
