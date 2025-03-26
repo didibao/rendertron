@@ -196,8 +196,23 @@ export class Renderer {
     const page = await this.browser.newPage();
 
     console.log(`start 1`);
+
     // Step 1: Navigate to login page
-    await page.goto('https://rpp.corelogic.com.au', { waitUntil: 'networkidle2' });
+    // await page.goto('https://rpp.corelogic.com.au', { waitUntil: 'networkidle2' });
+    await page.goto('https://www.corelogic.com.au', { waitUntil: 'networkidle2' });
+
+    await page.waitForSelector('a[data-menu-name="RP Data"]');
+
+    // Remove the `target` so it won’t open a new tab
+    // await page.evaluate(() => {
+    //   document && document.querySelector('a[data-menu-name="RP Data"]').removeAttribute('target');
+    // });
+
+    await Promise.all([
+      // Now click the link
+      await page.click('a[data-menu-name="RP Data"]'),
+      await page.waitForNavigation({ waitUntil: 'networkidle2' }),
+    ]);
 
     console.log('start 2');
 
