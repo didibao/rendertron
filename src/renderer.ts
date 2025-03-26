@@ -201,6 +201,18 @@ export class Renderer {
     // await page.goto('https://rpp.corelogic.com.au', { waitUntil: 'networkidle2' });
     await page.goto('https://www.corelogic.com.au', { waitUntil: 'networkidle2' });
 
+    // 1. Wait for the button to appear
+    await page.waitForSelector('button.btn-login');
+
+    // 2. Click the button
+    await page.click('button.btn-login');
+
+    // 3. (Optional) Wait for the collapse or login form to appear if needed
+    // For example, if a "collapse" or modal with id="#login" is supposed to open:
+    await page.waitForSelector('#login.show'); // or any element inside #login that indicates it's open
+
+    console.log('Login button clicked and login form is now visible');
+
     await page.waitForSelector('a[data-menu-name="RP Data"]');
 
     // Remove the `target` so it won’t open a new tab
