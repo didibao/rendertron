@@ -8,8 +8,8 @@ import * as path from 'path';
 import * as puppeteer from 'puppeteer';
 import * as url from 'url';
 
-import {Renderer, ScreenshotError} from './renderer';
-import {Config, ConfigManager} from './config';
+import { Renderer, ScreenshotError } from './renderer';
+import { Config, ConfigManager } from './config';
 
 /**
  * Rendertron rendering service. This runs the server which routes rendering
@@ -18,7 +18,7 @@ import {Config, ConfigManager} from './config';
 export class Rendertron {
   app: Koa = new Koa();
   private config: Config = ConfigManager.config;
-  private renderer: Renderer|undefined;
+  private renderer: Renderer | undefined;
   private port = process.env.PORT;
 
   async initialize() {
@@ -27,7 +27,7 @@ export class Rendertron {
 
     this.port = this.port || this.config.port;
 
-    const browser = await puppeteer.launch({args: ['--no-sandbox']});
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     this.renderer = new Renderer(browser, this.config);
 
     this.app.use(koaLogger());
@@ -40,6 +40,7 @@ export class Rendertron {
       await koaSend(
         ctx, 'index.html', { root: path.resolve(__dirname, '../src') });
     }));
+
     this.app.use(
       route.get('/_ah/health', (ctx: Koa.Context) => ctx.body = 'OK'));
 
@@ -55,6 +56,10 @@ export class Rendertron {
       '/screenshot/:url(.*)', this.handleScreenshotRequest.bind(this)));
     this.app.use(route.post(
       '/screenshot/:url(.*)', this.handleScreenshotRequest.bind(this)));
+
+    // Endpoint to generate report URL for a property address
+    this.app.use(route.post(
+      '/report', this.handleReportRequest.bind(this)));
 
     return this.app.listen(this.port, () => {
       console.log(`Listening on port ${this.port}`);
@@ -74,6 +79,19 @@ export class Rendertron {
     }
 
     return false;
+  }
+
+  async handleReportRequest(ctx: Koa.Context) {
+    if (!this.renderer) {
+      throw (new Error('No renderer initalized yet.'));
+    }
+
+    let options = undefined;
+    if (ctx.method === 'POST' && ctx.request.body) {
+      options = ctx.request.body;
+    }
+
+    return await this.renderer.report(options.address);
   }
 
   async handleRenderRequest(ctx: Koa.Context, url: string) {
