@@ -86,10 +86,10 @@ export class Rendertron {
       throw (new Error('No renderer initalized yet.'));
     }
 
-    if (this.restricted(url)) {
-      ctx.status = 403;
-      return;
-    }
+    // if (this.restricted(url)) {
+    //   ctx.status = 403;
+    //   return;
+    // }
 
     // let options = undefined;
     // if (ctx.method === 'POST' && ctx.request.body) {
