@@ -58,7 +58,7 @@ export class Rendertron {
       '/screenshot/:url(.*)', this.handleScreenshotRequest.bind(this)));
 
     // Endpoint to generate report URL for a property address
-    this.app.use(route.post(
+    this.app.use(route.get(
       '/report/:url(.*)', this.handleReportRequest.bind(this)));
 
     return this.app.listen(this.port, () => {
